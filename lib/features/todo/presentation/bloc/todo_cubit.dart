@@ -9,7 +9,6 @@ class TodoCubit extends Cubit<TodoState> {
   final DeleteTodo deleteTodo;
   final ToggleTodo toggleTodo;
   final _uuid = Uuid();
-  TodoFilter _filter = TodoFilter.all;
 
   TodoCubit({
     required this.getTasks,

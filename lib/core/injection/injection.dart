@@ -16,7 +16,9 @@ Future<void> init() async {
   );
 
   // Repository
-  sl.registerLazySingleton<TodoRepository>(() => TodoRepositoryImpl(sl()));
+  sl.registerLazySingleton<TodoRepository>(
+    () => TodoRepositoryImpl(dataSource: sl()),
+  );
 
   // Usecases
   sl.registerLazySingleton(() => GetTasks(sl()));

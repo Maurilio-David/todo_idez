@@ -3,12 +3,12 @@ import '../../todo.dart';
 class TodoRepositoryImpl implements TodoRepository {
   final TodoLocalDataSource dataSource;
 
-  TodoRepositoryImpl(this.dataSource);
+  TodoRepositoryImpl({required this.dataSource});
 
   @override
   List<Todo> getAll() {
     final models = dataSource.getAll();
-    return models.map((m) => m as Todo).toList(); // ou m.toEntity()
+    return models.map((m) => m).toList(); // ou m.toEntity()
   }
 
   @override

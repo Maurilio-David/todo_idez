@@ -1,7 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:todo_idez/core/core.dart';
 import 'package:todo_idez/features/features.dart';
 
 import 'unit.dart';
