@@ -23,7 +23,29 @@ class _TodoPageState extends State<TodoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tarefas')),
+      appBar: AppBar(
+        title: Text('Tarefas'),
+        actions: [
+          PopupMenuButton<TodoFilter>(
+            icon: const Icon(Icons.filter_list),
+            onSelected: (filter) {
+              context.read<TodoCubit>().applyFilter(filter);
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: TodoFilter.all, child: Text('Todas')),
+              const PopupMenuItem(
+                value: TodoFilter.done,
+                child: Text('Concluídas'),
+              ),
+              const PopupMenuItem(
+                value: TodoFilter.pending,
+                child: Text('Pendentes'),
+              ),
+            ],
+          ),
+        ],
+      ),
+
       body: BlocBuilder<TodoCubit, TodoState>(
         builder: (context, state) {
           if (state.status == TodoStatus.loading ||
@@ -33,26 +55,49 @@ class _TodoPageState extends State<TodoPage> {
 
           final list = context.read<TodoCubit>().visible();
           if (list.isEmpty) {
-            return Center(child: Text('Nenhuma tarefa. Adicione uma!'));
+            return Column(
+              children: [
+                MenuWidget(filter: state.filter),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.filter_list_outlined, size: 70),
+                      Text('Nenhuma tarefa disponível'),
+                    ],
+                  ),
+                ),
+              ],
+            );
           }
 
           return Padding(
             padding: const EdgeInsets.all(12.0),
-            child: ListView.separated(
-              itemCount: list.length,
-              separatorBuilder: (_, __) => SizedBox(height: 8),
-              itemBuilder: (context, i) {
-                final t = list[i];
-                return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300),
-                  child: TodoItem(
-                    key: ValueKey(t.id),
-                    todo: t,
-                    onToggle: () => context.read<TodoCubit>().toggle(t.id),
-                    onDelete: () => context.read<TodoCubit>().remove(t.id),
+            child: Column(
+              children: [
+                MenuWidget(filter: state.filter),
+                SizedBox(height: 8),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: list.length,
+                    separatorBuilder: (_, __) => SizedBox(height: 8),
+                    itemBuilder: (context, i) {
+                      final t = list[i];
+                      return AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        child: TodoItem(
+                          key: ValueKey(t.id),
+                          todo: t,
+                          onToggle: () =>
+                              context.read<TodoCubit>().toggle(t.id),
+                          onDelete: () =>
+                              context.read<TodoCubit>().remove(t.id),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           );
         },

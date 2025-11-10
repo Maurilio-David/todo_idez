@@ -19,7 +19,7 @@ Future<void> init() async {
   sl.registerLazySingleton<TodoRepository>(() => TodoRepositoryImpl(sl()));
 
   // Usecases
-  sl.registerLazySingleton(() => GetTodos(sl()));
+  sl.registerLazySingleton(() => GetTasks(sl()));
   sl.registerLazySingleton(() => AddTodo(sl()));
   sl.registerLazySingleton(() => DeleteTodo(sl()));
   sl.registerLazySingleton(() => ToggleTodo(sl()));
@@ -27,7 +27,7 @@ Future<void> init() async {
   // Cubit
   sl.registerFactory(
     () => TodoCubit(
-      getTodos: sl(),
+      getTasks: sl(),
       addTodo: sl(),
       deleteTodo: sl(),
       toggleTodo: sl(),
